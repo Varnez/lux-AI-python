@@ -90,6 +90,7 @@ def find_closest_city(pos: Position, player: Player) -> Cell:
 
     if len(player.cities) > 0:
         closest_dist = math.inf
+
         # the cities are stored as a dictionary mapping city id to the city object, which has a citytiles field that
         # contains the information of all citytiles in that city
 
@@ -102,3 +103,22 @@ def find_closest_city(pos: Position, player: Player) -> Cell:
                     closest_city = city
 
     return closest_city
+
+def find_closest_city_tile(pos: Position, player: Player):
+    closest_city_tile = None
+
+    if len(player.cities) > 0:
+        closest_dist = math.inf
+
+        # the cities are stored as a dictionary mapping city id to the city object, which has a citytiles field that
+        # contains the information of all citytiles in that city
+
+        for k, city in player.cities.items():
+            for city_tile in city.citytiles:
+                dist = city_tile.pos.distance_to(pos)
+
+                if dist < closest_dist:
+                    closest_dist = dist
+                    closest_city_tile = city_tile
+
+    return closest_city_tile
