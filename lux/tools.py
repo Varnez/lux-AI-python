@@ -1,6 +1,6 @@
-from lux.game import Game
-from lux.constants import Constants
-from lux.game_objects import City, Player, Unit
+from .game import Game
+from .constants import Constants
+from .game_objects import City, Player, Unit
 
 
 def is_resource_left(game_state: Game, resource: Constants.RESOURCE_TYPES) -> bool:

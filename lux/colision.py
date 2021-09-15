@@ -3,7 +3,7 @@ import numpy as np
 from .game_map import Position
 from .game_objects import Player, Unit
 
-from ..tools import get_unit_id_number
+from .tools import get_unit_id_number
 
 
 class CollisionMap:

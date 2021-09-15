@@ -5,7 +5,7 @@ from lux.constants import Constants
 from lux.game_objects import Player
 from lux.game_map import Cell, Position
 
-from tools import is_resource_left
+from lux.tools import is_resource_left
 
 from typing import List
 

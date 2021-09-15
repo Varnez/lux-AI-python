@@ -3,8 +3,7 @@ from lux.constants import Constants
 from lux.game_map import Cell, Position
 from lux.game_objects import Player, Unit
 from lux.constants import Constants
-
-from tools import get_unit_id_number
+from lux.tools import get_unit_id_number
 
 from typing import List
 
