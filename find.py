@@ -1,0 +1,104 @@
+import math
+
+from lux.game import Game
+from lux.constants import Constants
+from lux.game_objects import Player
+from lux.game_map import Cell, Position
+
+from tools import is_resource_left
+
+from typing import List
+
+def find_resources(game_state: Game) -> List[Cell]:
+    resource_tiles: list[Cell] = []
+    width, height = game_state.map_width, game_state.map_height
+
+    for y in range(height):
+        for x in range(width):
+            cell = game_state.map.get_cell(x, y)
+
+            if cell.has_resource():
+                resource_tiles.append(cell)
+
+    return resource_tiles
+
+
+def find_empty_tiles(game_state: Game) -> List[Cell]:
+    empty_tiles: list[Cell] = []
+    width, height = game_state.map_width, game_state.map_height
+
+    for y in range(height):
+        for x in range(width):
+            cell = game_state.map.get_cell(x, y)
+
+            if not cell.has_resource() and not cell.citytile:
+                empty_tiles.append(cell)
+
+    return empty_tiles
+
+
+def find_closest_resources(game_state: Game, pos: Position, player: Player, resource_tiles: List[Cell]) -> Cell:
+    closest_dist = math.inf
+    closest_resource_tile = None
+
+    for resource_tile in resource_tiles:
+        if resource_tile.resource.type == Constants.RESOURCE_TYPES.URANIUM:
+            if not player.researched_uranium() or not is_resource_left(game_state, Constants.RESOURCE_TYPES.URANIUM) and False:
+                pass
+            else:
+                dist = resource_tile.pos.distance_to(pos)
+
+                if dist < closest_dist:
+                    closest_dist = dist
+                    closest_resource_tile = resource_tile
+
+        elif resource_tile.resource.type == Constants.RESOURCE_TYPES.COAL:
+            if not player.researched_coal() or not is_resource_left(game_state, Constants.RESOURCE_TYPES.COAL) and False:
+                pass
+            else:
+                dist = resource_tile.pos.distance_to(pos)
+
+                if dist < closest_dist:
+                    closest_dist = dist
+                    closest_resource_tile = resource_tile
+
+        else:  # Constants.RESOURCE_TYPES.WOOD
+            dist = resource_tile.pos.distance_to(pos)
+            if dist < closest_dist:
+                closest_dist = dist
+                closest_resource_tile = resource_tile
+
+    return closest_resource_tile
+
+
+def find_closest_empty_tile(pos: Position, player: Player, empty_tiles: List[Cell]) -> Cell:
+    closest_dist = math.inf
+    closest_empty_tile = None
+
+    for empty_tile in empty_tiles:
+        dist = empty_tile.pos.distance_to(pos)
+
+        if dist < closest_dist:
+            closest_dist = dist
+            closest_empty_tile = empty_tile
+
+    return closest_empty_tile
+
+
+def find_closest_city(pos: Position, player: Player) -> Cell:
+    closest_city = None
+
+    if len(player.cities) > 0:
+        closest_dist = math.inf
+        # the cities are stored as a dictionary mapping city id to the city object, which has a citytiles field that
+        # contains the information of all citytiles in that city
+
+        for k, city in player.cities.items():
+            for city_tile in city.citytiles:
+                dist = city_tile.pos.distance_to(pos)
+
+                if dist < closest_dist:
+                    closest_dist = dist
+                    closest_city = city
+
+    return closest_city
