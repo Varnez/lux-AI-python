@@ -1,5 +1,3 @@
-from lux.game_map import Cell
-from math import ceil
 from lux.game import Game
 from lux.constants import Constants
 from lux.game_objects import City, Player, Unit
