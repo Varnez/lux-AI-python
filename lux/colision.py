@@ -40,3 +40,6 @@ class CollisionMap:
                     self.undo_movement(player, actions, unit.pos, int(unit.id[2:]))
 
         self.update_colision(new_pos_id.pos, new_pos_id)
+
+    def reset(self):
+        self.state = np.zeros_like(self.state)
