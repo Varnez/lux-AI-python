@@ -80,7 +80,7 @@ class CollisionMap(GameMap):
 
         self.update_colision(unit.pos, new_pos_id)
 
-    def reset(self):
+    def reset_colision(self):
         self.state = np.zeros_like(self.state)
 
     def move_unit(self, player: 'Player', actions: List[str], unit: 'Unit', direction_to_move: Constants.DIRECTIONS):
