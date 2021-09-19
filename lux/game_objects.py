@@ -84,6 +84,8 @@ class Unit:
         self.cargo.wood = wood
         self.cargo.coal = coal
         self.cargo.uranium = uranium
+        self.id_value = int(unitid[2:])
+        
     def is_worker(self) -> bool:
         return self.type == UNIT_TYPES.WORKER
 
