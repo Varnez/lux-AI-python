@@ -1,6 +1,5 @@
 import numpy as np
 
-from .game import Game
 from .game_map import Position
 from .game_objects import Player, Unit
 from .constants import Constants
@@ -47,7 +46,7 @@ class CollisionMap:
     def reset(self):
         self.state = np.zeros_like(self.state)
 
-    def move_unit(game_state: Game, player: Player, actions: List[str], unit: Unit, direction_to_move: Constants.DIRECTIONS, un):
+    def move_unit(game_state, player: Player, actions: List[str], unit: Unit, direction_to_move: Constants.DIRECTIONS, un):
         position_to_move = unit.pos.translate(direction_to_move, 1)
 
         if game_state.colision_map.check_colision(position_to_move):
