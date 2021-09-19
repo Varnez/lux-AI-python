@@ -66,7 +66,7 @@ class CollisionMap(GameMap):
         if self.get_cell(unit.pos.x, unit.pos.y).citytile:
             self.colision_map[pos.x][pos.y] = unit.id_value
 
-    def undo_movement(self, player: Player, actions: list, pos: Position, new_pos_id: int=0):
+    def undo_movement(self, player: Player, actions: list, pos: Position, undoer_unit: Unit):
         id_num = int(self.colision_map[pos.x][pos.y])
         colliding_id = 'u_{}'.format(id_num)
 
@@ -77,9 +77,9 @@ class CollisionMap(GameMap):
         for unit in player.units:
             if unit.id == colliding_id:
                 if self.colision_map[unit.pos.x][unit.pos.y] != 0:
-                    self.undo_movement(player, actions, unit.pos)
+                    self.undo_movement(player, actions, unit.pos, unit)
 
-        self.update_colision(unit.pos, new_pos_id)
+        self.update_colision(undoer_unit.pos, undoer_unit)
 
     def reset_colision(self):
         self.colision_map = np.zeros_like(self.colision_map)
@@ -99,4 +99,4 @@ class CollisionMap(GameMap):
                 if self.check_colision(unit.pos) == 0:
                     self.update_colision(unit.pos, unit)
                 else:
-                    self.undo_movement(player, actions, unit.pos, unit.id_value)
+                    self.undo_movement(player, actions, unit.pos, unit)
