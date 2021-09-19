@@ -39,9 +39,9 @@ class CollisionMap:
         for unit in player.units:
             if unit.id == colliding_id:
                 if self.state[unit.pos.x][unit.pos.y] != 0:
-                    self.undo_movement(player, actions, unit.pos, int(unit.id[2:]))
+                    self.undo_movement(player, actions, unit.pos, get_unit_id_number(unit))
 
-        self.update_colision(new_pos_id.pos, new_pos_id)
+        self.update_colision(unit.pos, new_pos_id)
 
     def reset(self):
         self.state = np.zeros_like(self.state)
