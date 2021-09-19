@@ -58,7 +58,7 @@ class CollisionMap:
             if map.get_cell(unit.pos.x, unit.pos.y).citytile:
                 pass
             else:
-                if self.check_colision[unit.pos.x][unit.pos.y] == 0:
+                if self.check_colision(Position(unit.pos.x, unit.pos.y)) == 0:
                     self.update_colision(unit.pos, unit)
                 else:
                     self.undo_movement(player, actions, unit.pos, get_unit_id_number(unit))
