@@ -34,7 +34,7 @@ class Game:
         """
         update state
         """
-        self.map = GameMap(self.map_width, self.map_height)
+        self.map = CollisionMap(self.map_width, self.map_height)
         self.turn += 1
         self._reset_player_states()
 
