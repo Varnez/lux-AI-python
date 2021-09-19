@@ -1,5 +1,6 @@
 import numpy as np
 
+from .game_objects import Unit, Player
 from .constants import Constants
 from .position import Position
 
@@ -53,20 +54,20 @@ class GameMap:
 class CollisionMap(GameMap):
     def __init__(self, width: int, height: int):
         super().__init__(width, height)
-        self.state = np.zeros((width, height))
+        self.colision_map = np.zeros((width, height))
 
     def check_colision(self, pos: Position) -> bool:
-        if self.state[pos.x][pos.y] == 0:
+        if self.colision_map[pos.x][pos.y] == 0:
             return True
         else:
             return False
 
-    def update_colision(self, pos: Position, unit: 'Unit'):
+    def update_colision(self, pos: Position, unit: Unit):
         if self.get_cell(unit.pos.x, unit.pos.y).citytile:
-            self.state[pos.x][pos.y] = unit.id_value
+            self.colision_map[pos.x][pos.y] = unit.id_value
 
-    def undo_movement(self, player: 'Player', actions: list, pos: Position, new_pos_id: int=0):
-        id_num = int(self.state[pos.x][pos.y])
+    def undo_movement(self, player: Player, actions: list, pos: Position, new_pos_id: int=0):
+        id_num = int(self.colision_map[pos.x][pos.y])
         colliding_id = 'u_{}'.format(id_num)
 
         for action in actions:
@@ -75,15 +76,15 @@ class CollisionMap(GameMap):
 
         for unit in player.units:
             if unit.id == colliding_id:
-                if self.state[unit.pos.x][unit.pos.y] != 0:
+                if self.colision_map[unit.pos.x][unit.pos.y] != 0:
                     self.undo_movement(player, actions, unit.pos)
 
         self.update_colision(unit.pos, new_pos_id)
 
     def reset_colision(self):
-        self.state = np.zeros_like(self.state)
+        self.colision_map = np.zeros_like(self.colision_map)
 
-    def move_unit(self, player: 'Player', actions: List[str], unit: 'Unit', direction_to_move: Constants.DIRECTIONS):
+    def move_unit(self, player: Player, actions: List[str], unit: Unit, direction_to_move: Constants.DIRECTIONS):
         position_to_move = unit.pos.translate(direction_to_move, 1)
 
         if self.check_colision(position_to_move):
