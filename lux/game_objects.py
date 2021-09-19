@@ -105,7 +105,7 @@ class Unit:
     def get_total_cargo(self):
         return self.cargo.wood + self.cargo.coal + self.cargo.uranium
 
-    def had_enough_resources_to_build(self):
+    def has_enough_resources_to_build(self):
         if self.get_total_cargo >= GAME_CONSTANTS["PARAMETERS"]["CITY_BUILD_COST"]:
             return True
 
