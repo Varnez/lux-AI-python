@@ -1,7 +1,6 @@
 import math
 import numpy as np
 
-from .game_objects import Unit, Player
 from .constants import Constants
 
 from typing import List
@@ -120,11 +119,11 @@ class CollisionMap(GameMap):
         else:
             return False
 
-    def update_colision(self, pos: Position, unit: Unit):
+    def update_colision(self, pos: Position, unit: 'Unit'):
         if self.get_cell(unit.pos.x, unit.pos.y).citytile:
             self.state[pos.x][pos.y] = unit.id_value
 
-    def undo_movement(self, player: Player, actions: list, pos: Position, new_pos_id: int=0):
+    def undo_movement(self, player: 'Player', actions: list, pos: Position, new_pos_id: int=0):
         id_num = int(self.state[pos.x][pos.y])
         colliding_id = 'u_{}'.format(id_num)
 
@@ -142,7 +141,7 @@ class CollisionMap(GameMap):
     def reset(self):
         self.state = np.zeros_like(self.state)
 
-    def move_unit(self, player: Player, actions: List[str], unit: Unit, direction_to_move: Constants.DIRECTIONS):
+    def move_unit(self, player: 'Player', actions: List[str], unit: 'Unit', direction_to_move: Constants.DIRECTIONS):
         position_to_move = unit.pos.translate(direction_to_move, 1)
 
         if self.check_colision(position_to_move):
