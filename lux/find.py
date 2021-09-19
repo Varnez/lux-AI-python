@@ -1,11 +1,11 @@
 import math
 
-from lux.game import Game
-from lux.constants import Constants
-from lux.game_objects import Player
-from lux.game_map import Cell, Position
+from .game import Game
+from .constants import Constants
+from .game_objects import Player
+from .game_map import Cell, Position
 
-from lux.tools import is_resource_left
+from .tools import is_resource_left
 
 from typing import List
 
