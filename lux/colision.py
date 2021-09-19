@@ -1,6 +1,6 @@
 import numpy as np
 
-from .game_map import Position
+from .game_map import Position, GameMap
 from .game_objects import Player, Unit
 from .constants import Constants
 
@@ -46,19 +46,19 @@ class CollisionMap:
     def reset(self):
         self.state = np.zeros_like(self.state)
 
-    def move_unit(game_state, player: Player, actions: List[str], unit: Unit, direction_to_move: Constants.DIRECTIONS, un):
+    def move_unit(self, player: Player, actions: List[str], map: GameMap, unit: Unit, direction_to_move: Constants.DIRECTIONS):
         position_to_move = unit.pos.translate(direction_to_move, 1)
 
-        if game_state.colision_map.check_colision(position_to_move):
-            game_state.colision_map.update_colision(position_to_move, unit)
+        if self.check_colision(position_to_move):
+            self.update_colision(position_to_move, unit)
             action = unit.move(direction_to_move)
             actions.append(action)
 
         else:
-            if game_state.map.get_cell(unit.pos.x, unit.pos.y).citytile:
+            if map.get_cell(unit.pos.x, unit.pos.y).citytile:
                 pass
             else:
-                if game_state.colision_map.check_colision[unit.pos.x][unit.pos.y] == 0:
-                    game_state.colision_map.update_colision(unit.pos, unit)
+                if self.check_colision[unit.pos.x][unit.pos.y] == 0:
+                    self.update_colision(unit.pos, unit)
                 else:
-                    game_state.colision_map.undo_movement(player, actions, game_state.colision_map, unit.pos, get_unit_id_number(unit))
+                    self.undo_movement(player, actions, unit.pos, get_unit_id_number(unit))

@@ -1,14 +1,14 @@
-from .game import Game
+from .game_map import GameMap
 from .constants import Constants
 from .game_objects import City, Player, Unit
 
 
-def is_resource_left(game_state: Game, resource: Constants.RESOURCE_TYPES) -> bool:
-    width, height = game_state.map_width, game_state.map_height
+def is_resource_left(map: GameMap, resource: Constants.RESOURCE_TYPES) -> bool:
+    width, height = map.width, map.height
 
     for y in range(height):
         for x in range(width):
-            cell = game_state.map.get_cell(x, y)
+            cell = map.get_cell(x, y)
 
             if cell.resource == resource:
                 return True
