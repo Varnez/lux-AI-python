@@ -1,7 +1,6 @@
 from .constants import Constants
-from .game_map import GameMap
+from .game_map import CollisionMap, GameMap
 from .game_objects import Player, Unit, City, CityTile
-from .colision import CollisionMap
 
 INPUT_CONSTANTS = Constants.INPUT_CONSTANTS
 
@@ -17,9 +16,8 @@ class Game:
         mapInfo = messages[1].split(" ")
         self.map_width = int(mapInfo[0])
         self.map_height = int(mapInfo[1])
-        self.map = GameMap(self.map_width, self.map_height)
+        self.map = CollisionMap(self.map_width, self.map_height)
         self.players = [Player(0), Player(1)]
-        self.colision_map = CollisionMap(self.map_width, self.map_height)
 
     def _end_turn(self):
         print("D_FINISH")
