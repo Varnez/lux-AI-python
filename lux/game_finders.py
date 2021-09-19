@@ -5,7 +5,7 @@ from .constants import Constants
 from .game_objects import Player
 from .game_map import Cell, Position
 
-from .tools import is_resource_left
+from .game_tools import is_resource_left
 
 from typing import List
 
