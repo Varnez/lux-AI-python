@@ -102,6 +102,9 @@ class Unit:
         else:
             return GAME_CONSTANTS["PARAMETERS"]["RESOURCE_CAPACITY"]["CART"] - spaceused
 
+    def get_total_cargo(self):
+        return self.cargo.wood + self.cargo.coal + self.cargo.uranium
+
     def can_build(self, game_map) -> bool:
         """
         whether or not the unit can build where it is right now
