@@ -42,4 +42,4 @@ def count_player_city_tiles(player: Player):
 
 
 def get_unit_id_number(unit: Unit) -> int:
-    return int(unit.id[:2])
+    return int(unit.id[2:])
