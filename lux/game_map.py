@@ -110,7 +110,8 @@ class GameMap:
 
 
 class CollisionMap(GameMap):
-    def __init__(self, height: int, width: int):
+    def __init__(self, width: int, height: int):
+        super().__init__(width, height)
         self.state = np.zeros((width, height))
 
     def check_colision(self, pos: Position) -> bool:
