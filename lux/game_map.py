@@ -63,7 +63,7 @@ class CollisionMap(GameMap):
             return False
 
     def update_colision(self, pos: Position, unit: Unit):
-        if self.get_cell(unit.pos.x, unit.pos.y).citytile:
+        if not self.get_cell(unit.pos.x, unit.pos.y).citytile:
             self.colision_map[pos.x][pos.y] = unit.id_value
 
     def undo_movement(self, player: Player, actions: list, pos: Position, undoer_unit: Unit):
