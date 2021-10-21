@@ -23,8 +23,13 @@ class Cell:
         self.resource: Resource = None
         self.citytile = None
         self.road = 0
+        self.in_cluster = False
+
     def has_resource(self):
         return self.resource is not None and self.resource.amount > 0
+
+    def mark_included_in_cluster(self):
+        self.in_cluster = True
 
 
 class GameMap:
@@ -51,10 +56,39 @@ class GameMap:
         cell.resource = Resource(r_type, amount)
 
 
+class ResourceCluster:
+    def __init__(self, first_cell: Cell, map: GameMap):
+        self.cells = [first_cell]
+        self.resource_type = first_cell.resource.type
+        self.assigned_units = []
+
+        self._add_adjacent_cells(first_cell)
+
+    def _add_adjacent_cells(self, cell: Cell, map: GameMap):
+        for direction in DIRECTIONS:
+            adjacent_cell = map.get_cell_by_pos(cell.pos.translate(direction, 1))
+
+            if adjacent_cell in self.cells:
+                pass
+
+            elif adjacent_cell.resource == self.resource_type:
+                self._add_cell(adjacent_cell)
+                self._add_adjacent_cells(adjacent_cell)
+
+                adjacent_cell.mark_included_in_cluster()
+
+
 class CollisionMap(GameMap):
     def __init__(self, width: int, height: int):
         super().__init__(width, height)
         self.colision_map = np.zeros((width, height))
+        self.resource_clusters = []
+
+        for x, y in (range(width), range(height)):
+            cell = self.get_cell(x, y)
+
+            if cell.has_resource and not cell.in_cluster:
+                self.resource_clusters(ResourceCluster(cell, self))
 
     def check_colision(self, pos: Position) -> bool:
         if self.colision_map[pos.x][pos.y] == 0:
