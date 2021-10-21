@@ -84,7 +84,7 @@ class CollisionMap(GameMap):
         self.colision_map = np.zeros((width, height))
         self.resource_clusters = []
 
-        for x, y in (range(width), range(height)):
+        for x, y in zip(range(width), range(height)):
             cell = self.get_cell(x, y)
 
             if cell.has_resource and not cell.in_cluster:
