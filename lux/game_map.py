@@ -88,7 +88,7 @@ class CollisionMap(GameMap):
             cell = self.get_cell(x, y)
 
             if cell.has_resource and not cell.in_cluster:
-                self.resource_clusters(ResourceCluster(cell, self))
+                self.resource_clusters.append(ResourceCluster(cell, self))
 
     def check_colision(self, pos: Position) -> bool:
         if self.colision_map[pos.x][pos.y] == 0:
