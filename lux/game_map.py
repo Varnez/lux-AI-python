@@ -68,11 +68,11 @@ class ResourceCluster:
         for direction in DIRECTIONS:
             adjacent_cell = map.get_cell_by_pos(cell.pos.translate(direction, 1))
 
-            if adjacent_cell in self.cells:
+            if adjacent_cell in self.cells or not adjacent_cell.has_resource:
                 pass
 
             elif adjacent_cell.resource == self.resource_type:
-                self._add_cell(adjacent_cell)
+                self.cells.append(adjacent_cell)
                 self._add_adjacent_cells(adjacent_cell)
 
                 adjacent_cell.mark_included_in_cluster()
