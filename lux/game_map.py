@@ -1,3 +1,4 @@
+import math
 import numpy as np
 
 from .game_objects import Unit, Player
@@ -23,13 +24,13 @@ class Cell:
         self.resource: Resource = None
         self.citytile = None
         self.road = 0
-        self.in_cluster = False
+        self.cluster = None
 
     def has_resource(self):
         return self.resource is not None and self.resource.amount > 0
 
-    def mark_included_in_cluster(self):
-        self.in_cluster = True
+    def mark_included_in_cluster(self, cluster):
+        self.cluster = cluster
 
 
 class GameMap:
@@ -75,7 +76,23 @@ class ResourceCluster:
                 self.cells.append(adjacent_cell)
                 self._add_adjacent_cells(adjacent_cell)
 
-                adjacent_cell.mark_included_in_cluster()
+                adjacent_cell.cluster = self
+
+    def cell_amount(self) -> int:
+        return len(self.cell)
+
+    def closest_reource_tile(self, position: Position) -> Cell:
+        least_distance = math.inf
+        closest_tile = None
+
+        for cell in self.cells:
+            distance = cell.pos.distance_to(position)
+
+            if distance < least_distance:
+                least_distance = distance
+                closest_tile = cell
+
+        return closest_tile
 
 
 class CollisionMap(GameMap):
