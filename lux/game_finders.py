@@ -1,4 +1,5 @@
 import math
+import numpy as np
 
 from .game import Game
 from .constants import Constants
@@ -37,28 +38,66 @@ def find_empty_tiles(game_state: Game) -> List[Cell]:
     return empty_tiles
 
 
-def find_closest_resources(game_state: Game, pos: Position, player: Player, resource_tiles: List[Cell]) -> Cell:
+def find_closest_resources(game_state: Game, pos: Position, player: Player, resource_tiles: List[Cell],
+                           min_distance: int=0) -> Cell:
     closest_dist = math.inf
     closest_resource_tile = None
 
     for resource_tile in resource_tiles:
         if resource_tile.resource.type == Constants.RESOURCE_TYPES.URANIUM:
-            if not player.researched_uranium() or not is_resource_left(game_state, Constants.RESOURCE_TYPES.URANIUM) and False:
+            if not player.researched_uranium():
                 pass
             else:
                 dist = resource_tile.pos.distance_to(pos)
 
-                if dist < closest_dist:
+                if dist < closest_dist and dist >= min_distance:
                     closest_dist = dist
                     closest_resource_tile = resource_tile
 
         elif resource_tile.resource.type == Constants.RESOURCE_TYPES.COAL:
-            if not player.researched_coal() or not is_resource_left(game_state, Constants.RESOURCE_TYPES.COAL) and False:
+            if not player.researched_coal():
                 pass
             else:
                 dist = resource_tile.pos.distance_to(pos)
 
-                if dist < closest_dist:
+                if dist < closest_dist and dist >= min_distance:
+                    closest_dist = dist
+                    closest_resource_tile = resource_tile
+
+        else:  # Constants.RESOURCE_TYPES.WOOD
+            dist = resource_tile.pos.distance_to(pos)
+            if dist < closest_dist and dist >= min_distance:
+                closest_dist = dist
+                closest_resource_tile = resource_tile
+
+    return closest_resource_tile
+
+
+def find_closest_unnocupied_resources(game_state: Game, pos: Position, player: Player, resource_tiles: List[Cell],
+                                      unit_map: np.ndarry,  min_distance: int=0) -> Cell:
+    closest_dist = math.inf
+    closest_resource_tile = None
+
+    for resource_tile in resource_tiles:
+        if unit_map[resource_tile.pos.x][resource_tile.pos.y] != 0:
+            pass
+        elif resource_tile.resource.type == Constants.RESOURCE_TYPES.URANIUM:
+            if not player.researched_uranium():
+                pass
+            else:
+                dist = resource_tile.pos.distance_to(pos)
+
+                if dist < closest_dist and dist >= min_distance:
+                    closest_dist = dist
+                    closest_resource_tile = resource_tile
+
+        elif resource_tile.resource.type == Constants.RESOURCE_TYPES.COAL:
+            if not player.researched_coal():
+                pass
+            else:
+                dist = resource_tile.pos.distance_to(pos)
+
+                if dist < closest_dist and dist >= min_distance:
                     closest_dist = dist
                     closest_resource_tile = resource_tile
 
