@@ -131,10 +131,14 @@ class CollisionMap(GameMap):
         self.resource_clusters = []
         self.resource_clusters_population = None
 
+        print('papo')
         for x, y in zip(range(width), range(height)):
             cell = self.get_cell(x, y)
+            print('pepe')
 
             if cell.has_resource() and not cell.cluster:
+                print('pepa')
+
                 self.resource_clusters.append(ResourceCluster(cell, self))
 
         self.update_resource_cluster_population()
