@@ -12,10 +12,12 @@ DIRECTIONS = Constants.DIRECTIONS
 RESOURCE_TYPES = Constants.RESOURCE_TYPES
 
 
+
 class Resource:
     def __init__(self, r_type: str, amount: int):
         self.type = r_type
         self.amount = amount
+
 
 
 class Cell:
@@ -31,6 +33,7 @@ class Cell:
 
     def mark_included_in_cluster(self, cluster):
         self.cluster = cluster
+
 
 
 class GameMap:
@@ -57,6 +60,7 @@ class GameMap:
         cell.resource = Resource(r_type, amount)
 
 
+
 class ResourceCluster:
     def __init__(self, first_cell: Cell, map: GameMap):
         self.cells = [first_cell]
@@ -64,6 +68,7 @@ class ResourceCluster:
         self.assigned_units = []
 
         self._add_adjacent_cells(first_cell)
+
 
     def _add_adjacent_cells(self, cell: Cell, map: GameMap):
         for direction in DIRECTIONS:
@@ -78,8 +83,10 @@ class ResourceCluster:
 
                 adjacent_cell.cluster = self
 
+
     def cell_amount(self) -> int:
         return len(self.cell)
+
 
     def closest_reource_tile(self, position: Position) -> Cell:
         least_distance = math.inf
@@ -93,6 +100,17 @@ class ResourceCluster:
                 closest_tile = cell
 
         return closest_tile
+
+
+    def check_number_of_units(self, unit_map: np.ndarray):
+        number_of_units = 0
+
+        for cell in self.cells:
+            if unit_map[cell.pos.x][cell.pos.y] != 0:
+                number_of_units += 1
+
+        return number_of_units
+
 
 
 class CollisionMap(GameMap):
