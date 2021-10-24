@@ -74,7 +74,7 @@ def find_closest_resources(game_state: Game, pos: Position, player: Player, reso
 
 
 def find_closest_unnocupied_resources(game_state: Game, pos: Position, player: Player, resource_tiles: List[Cell],
-                                      unit_map: np.ndarry,  min_distance: int=0) -> Cell:
+                                      unit_map: np.ndarray,  min_distance: int=0) -> Cell:
     closest_dist = math.inf
     closest_resource_tile = None
 
