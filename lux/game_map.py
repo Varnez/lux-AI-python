@@ -67,7 +67,7 @@ class ResourceCluster:
 
         x(first_cell.pos.x, first_cell.pos.y)
         first_cell.cluster = self
-        self._add_adjacent_cells(first_cell)
+        self._add_adjacent_cells(first_cell, map)
 
 
     def _add_adjacent_cells(self, cell: Cell, map: GameMap):
