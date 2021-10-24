@@ -130,6 +130,7 @@ class CollisionMap(GameMap):
 
         self.update_resource_cluster_population()
 
+
     def check_colision(self, pos: Position) -> bool:
         if self.colision_map[pos.x][pos.y] == 0:
             return True
