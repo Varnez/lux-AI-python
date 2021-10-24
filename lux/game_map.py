@@ -113,6 +113,13 @@ class ResourceCluster:
         return number_of_units
 
 
+    def check_occupancy(self, unit_map: np.ndarray) -> float:
+        cluster_population = self.check_number_of_units(unit_map)
+
+        occupancy = cluster_population / self.cell_amount()
+
+        return occupancy
+
 
 class CollisionMap(GameMap):
     def __init__(self, width: int, height: int):
