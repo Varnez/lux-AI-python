@@ -67,6 +67,7 @@ class ResourceCluster:
         self.resource_type = first_cell.resource.type
         self.assigned_units = []
 
+        first_cell.cluster = self
         self._add_adjacent_cells(first_cell)
 
 
