@@ -85,7 +85,7 @@ class ResourceCluster:
 
 
     def cell_amount(self) -> int:
-        return len(self.cell)
+        return len(self.cells)
 
 
     def closest_reource_tile(self, position: Position) -> Cell:
@@ -120,6 +120,7 @@ class CollisionMap(GameMap):
         self.player_unit_placement_map = np.zeros((width, height))
         self.enemy_unit_placement_map = np.zeros((width, height))
         self.resource_clusters = []
+        self.resource_clusters_population = None
 
         for x, y in zip(range(width), range(height)):
             cell = self.get_cell(x, y)
@@ -127,6 +128,7 @@ class CollisionMap(GameMap):
             if cell.has_resource() and not cell.in_cluster:
                 self.resource_clusters.append(ResourceCluster(cell, self))
 
+        self.update_resource_cluster_population()
 
     def check_colision(self, pos: Position) -> bool:
         if self.colision_map[pos.x][pos.y] == 0:
@@ -189,3 +191,33 @@ class CollisionMap(GameMap):
     def _update_unit_map(self, map: np.ndarray, units: List[Unit]):
         for unit in units:
             map[unit.pos.x][unit.pos.y] = unit.id_value
+
+
+    def update_resource_cluster_population(self):
+        populations = []
+
+        for cluster in self.resource_clusters:
+            population = cluster.check_number_of_units(self.player_unit_placement_map)
+            population += cluster.check_number_of_units(self.enemy_unit_placement_map)
+
+            populations.append(population)
+
+        self.resource_clusters_population = np.array(populations)
+
+    def get_closest_available_cluster(self, pos: Position, max_occupancy: float=1.0) -> Cell:
+        """In order not to be greedy on processing time, I will only calculate the distance to the original cell.
+        This might be subject to revision in the future, that's why I'm leaving it written down here."""
+        least_distance = math.inf
+        closest_cluster = None
+
+        for idx, cluster in enumerate(self.resource_clusters):
+            if (self.cluster_population[idx] / cluster.cell_amount()) > max_occupancy:
+                continue
+
+            distance = pos.distance_to(cluster.cells[0].pos)
+
+            if distance < least_distance:
+                least_distance = distance
+                closest_cluster = cluster
+
+        return closest_cluster
