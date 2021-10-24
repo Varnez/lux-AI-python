@@ -108,7 +108,7 @@ class ResourceCluster:
         number_of_units = 0
 
         for cell in self.cells:
-            if unit_map[cell.pos.x][cell.pos.y] != 0:
+            if unit_map[cell.pos.y][cell.pos.x] != 0:
                 number_of_units += 1
 
         return number_of_units
@@ -149,11 +149,11 @@ class CollisionMap(GameMap):
 
     def update_colision(self, pos: Position, unit: Unit):
         if not self.get_cell(pos.x, pos.y).citytile:
-            self.colision_map[pos.x][pos.y] = unit.id_value
+            self.colision_map[pos.y][pos.x] = unit.id_value
 
 
     def undo_movement(self, player: Player, actions: list, pos: Position, undoer_unit: Unit):
-        id_num = int(self.colision_map[pos.x][pos.y])
+        id_num = int(self.colision_map[pos.y][pos.x])
         colliding_id = 'u_{}'.format(id_num)
 
         for action in actions:
@@ -162,7 +162,7 @@ class CollisionMap(GameMap):
 
         for unit in player.units:
             if unit.id == colliding_id:
-                if self.colision_map[unit.pos.x][unit.pos.y] != 0:
+                if self.colision_map[unit.pos.y][unit.pos.x] != 0:
                     self.undo_movement(player, actions, unit.pos, unit)
 
         self.update_colision(undoer_unit.pos, undoer_unit)
@@ -200,7 +200,7 @@ class CollisionMap(GameMap):
 
     def _update_unit_map(self, map: np.ndarray, units: List[Unit]):
         for unit in units:
-            map[unit.pos.x][unit.pos.y] = unit.id_value
+            map[unit.pos.y][unit.pos.x] = unit.id_value
 
 
     def update_resource_cluster_population(self):
