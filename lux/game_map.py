@@ -1,6 +1,8 @@
 import math
 import numpy as np
 
+import annotate
+
 from .game_objects import Unit, Player
 from .constants import Constants
 from .position import Position
@@ -30,9 +32,6 @@ class Cell:
 
     def has_resource(self):
         return self.resource is not None and self.resource.amount > 0
-
-    def mark_included_in_cluster(self, cluster):
-        self.cluster = cluster
 
 
 
@@ -67,6 +66,7 @@ class ResourceCluster:
         self.resource_type = first_cell.resource.type
         self.assigned_units = []
 
+        annotate.x(first_cell.pos.x, first_cell.pos.y)
         first_cell.cluster = self
         self._add_adjacent_cells(first_cell)
 
@@ -81,6 +81,8 @@ class ResourceCluster:
             elif adjacent_cell.resource == self.resource_type:
                 self.cells.append(adjacent_cell)
                 self._add_adjacent_cells(adjacent_cell)
+
+                annotate.circle(adjacent_cell.pos.x, adjacent_cell.pos.y)
 
                 adjacent_cell.cluster = self
 
@@ -133,7 +135,7 @@ class CollisionMap(GameMap):
         for x, y in zip(range(width), range(height)):
             cell = self.get_cell(x, y)
 
-            if cell.has_resource() and not cell.in_cluster:
+            if cell.has_resource() and not cell.cluster:
                 self.resource_clusters.append(ResourceCluster(cell, self))
 
         self.update_resource_cluster_population()
