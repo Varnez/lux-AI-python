@@ -141,7 +141,7 @@ class CollisionMap(GameMap):
 
 
     def check_colision(self, pos: Position) -> bool:
-        if self.colision_map[pos.x][pos.y] == 0:
+        if self.colision_map[pos.y][pos.x] == 0:
             return True
         else:
             return False
