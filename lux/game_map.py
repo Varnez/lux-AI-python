@@ -99,6 +99,8 @@ class CollisionMap(GameMap):
     def __init__(self, width: int, height: int):
         super().__init__(width, height)
         self.colision_map = np.zeros((width, height))
+        self.player_unit_placement_map = np.zeros((width, height))
+        self.enemy_unit_placement_map = np.zeros((width, height))
         self.resource_clusters = []
 
         for x, y in zip(range(width), range(height)):
@@ -107,15 +109,18 @@ class CollisionMap(GameMap):
             if cell.has_resource() and not cell.in_cluster:
                 self.resource_clusters.append(ResourceCluster(cell, self))
 
+
     def check_colision(self, pos: Position) -> bool:
         if self.colision_map[pos.x][pos.y] == 0:
             return True
         else:
             return False
 
+
     def update_colision(self, pos: Position, unit: Unit):
         if not self.get_cell(pos.x, pos.y).citytile:
             self.colision_map[pos.x][pos.y] = unit.id_value
+
 
     def undo_movement(self, player: Player, actions: list, pos: Position, undoer_unit: Unit):
         id_num = int(self.colision_map[pos.x][pos.y])
@@ -132,8 +137,10 @@ class CollisionMap(GameMap):
 
         self.update_colision(undoer_unit.pos, undoer_unit)
 
+
     def reset_colision(self):
         self.colision_map = np.zeros_like(self.colision_map)
+
 
     def move_unit(self, player: Player, actions: List[str], unit: Unit, direction_to_move: Constants.DIRECTIONS):
         position_to_move = unit.pos.translate(direction_to_move, 1)
@@ -151,3 +158,16 @@ class CollisionMap(GameMap):
                     self.update_colision(unit.pos, unit)
                 else:
                     self.undo_movement(player, actions, unit.pos, unit)
+
+
+    def update_player_unit_placement_map(self, units):
+        self._update_unit_map(self.player_unit_placement_map, units)
+
+
+    def update_enemy_unit_placement_map(self, units):
+        self._update_unit_map(self.enemy_unit_placement_map, units)
+
+
+    def _update_unit_map(self, map: np.ndarray, units: List[Unit]):
+        for unit in units:
+            map[unit.pos.x][unit.pos.y] = unit.id_value
