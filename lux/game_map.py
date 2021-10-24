@@ -134,6 +134,7 @@ class CollisionMap(GameMap):
         for x in range(width):
             for y in range(height):
                 cell = self.get_cell(x, y)
+                print(cell.has_resource(), not cell.cluster)
 
                 if cell.has_resource() and not cell.cluster:
                     self.resource_clusters.append(ResourceCluster(cell, self))
