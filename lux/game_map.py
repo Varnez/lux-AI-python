@@ -79,7 +79,7 @@ class ResourceCluster:
 
             elif adjacent_cell.resource == self.resource_type:
                 self.cells.append(adjacent_cell)
-                self._add_adjacent_cells(adjacent_cell)
+                self._add_adjacent_cells(adjacent_cell, map)
 
                 circle(adjacent_cell.pos.x, adjacent_cell.pos.y)
 
