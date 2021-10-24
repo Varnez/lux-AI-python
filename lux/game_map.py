@@ -134,7 +134,7 @@ class CollisionMap(GameMap):
         print('papo')
         for x, y in zip(range(width), range(height)):
             cell = self.get_cell(x, y)
-            print('pepe')
+            print(cell.has_resource(), cell.cluster)
 
             if cell.has_resource() and not cell.cluster:
                 print('pepa')
