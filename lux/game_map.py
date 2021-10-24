@@ -1,11 +1,10 @@
 import math
 import numpy as np
 
-import annotate
-
 from .game_objects import Unit, Player
 from .constants import Constants
 from .position import Position
+from .annotate import circle, x
 
 from typing import List
 
@@ -66,7 +65,7 @@ class ResourceCluster:
         self.resource_type = first_cell.resource.type
         self.assigned_units = []
 
-        annotate.x(first_cell.pos.x, first_cell.pos.y)
+        x(first_cell.pos.x, first_cell.pos.y)
         first_cell.cluster = self
         self._add_adjacent_cells(first_cell)
 
@@ -82,7 +81,7 @@ class ResourceCluster:
                 self.cells.append(adjacent_cell)
                 self._add_adjacent_cells(adjacent_cell)
 
-                annotate.circle(adjacent_cell.pos.x, adjacent_cell.pos.y)
+                circle(adjacent_cell.pos.x, adjacent_cell.pos.y)
 
                 adjacent_cell.cluster = self
 
