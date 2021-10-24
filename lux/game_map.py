@@ -131,15 +131,34 @@ class CollisionMap(GameMap):
         self.resource_clusters = []
         self.resource_clusters_population = None
 
-        for x in range(width):
-            for y in range(height):
+
+    def _update_resource_clusters(self):
+        for x in range(self.width):
+            for y in range(self.height):
                 cell = self.get_cell(x, y)
                 print(cell.has_resource(), not cell.cluster)
 
                 if cell.has_resource() and not cell.cluster:
                     self.resource_clusters.append(ResourceCluster(cell, self))
 
-        self.update_resource_cluster_population()
+        self._update_resource_cluster_population()
+
+
+    def _update_resource_cluster_population(self):
+        populations = []
+
+        for cluster in self.resource_clusters:
+            population = cluster.check_number_of_units(self.player_unit_placement_map)
+            population += cluster.check_number_of_units(self.enemy_unit_placement_map)
+
+            populations.append(population)
+
+        self.resource_clusters_population = np.array(populations)
+
+
+    def _update_unit_map(self, map: np.ndarray, units: List[Unit]):
+        for unit in units:
+            map[unit.pos.y][unit.pos.x] = unit.id_value
 
 
     def check_colision(self, pos: Position) -> bool:
@@ -199,22 +218,6 @@ class CollisionMap(GameMap):
     def update_enemy_unit_placement_map(self, units):
         self._update_unit_map(self.enemy_unit_placement_map, units)
 
-
-    def _update_unit_map(self, map: np.ndarray, units: List[Unit]):
-        for unit in units:
-            map[unit.pos.y][unit.pos.x] = unit.id_value
-
-
-    def update_resource_cluster_population(self):
-        populations = []
-
-        for cluster in self.resource_clusters:
-            population = cluster.check_number_of_units(self.player_unit_placement_map)
-            population += cluster.check_number_of_units(self.enemy_unit_placement_map)
-
-            populations.append(population)
-
-        self.resource_clusters_population = np.array(populations)
 
     def get_closest_available_cluster(self, pos: Position, max_occupancy: float=1.0) -> Cell:
         """In order not to be greedy on processing time, I will only calculate the distance to the original cell.
