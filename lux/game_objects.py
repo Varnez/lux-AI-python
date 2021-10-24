@@ -73,6 +73,21 @@ class Cargo:
         return f"Cargo | Wood: {self.wood}, Coal: {self.coal}, Uranium: {self.uranium}"
 
 
+class Objective:
+    def __init__(self, position: Position, action: str=None, patience: int=2):
+        self.pos = position
+        self.patience = patience
+        self.action = action
+
+    def update(self, position: Position) -> int:
+        if position.distance_to(self.unit_previous_pos) == 0:
+            self.patience -= 1
+        else:
+            self.unit_previous_pos = self.unit.pos
+
+        return self.patience
+
+
 class Unit:
     def __init__(self, teamid, u_type, unitid, x, y, cooldown, wood, coal, uranium):
         self.pos = Position(x, y)
@@ -85,6 +100,7 @@ class Unit:
         self.cargo.coal = coal
         self.cargo.uranium = uranium
         self.id_value = int(unitid[2:])
+        self.objective = None
 
     def is_worker(self) -> bool:
         return self.type == UNIT_TYPES.WORKER
@@ -150,3 +166,19 @@ class Unit:
         return the command to pillage whatever is underneath the worker
         """
         return "p {}".format(self.id)
+
+
+    def set_objective(self, position: Position, action: str=None, patience: int=2):
+        self.objective = Objective(position, action, patience)
+
+
+    def update_objective(self):
+        if self.objective:
+            patience = self.objective.update()
+
+            if not patience:
+                self.objective = None
+
+
+    def objective_position(self) -> Position:
+        return self.objective.pos
