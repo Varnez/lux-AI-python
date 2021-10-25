@@ -80,7 +80,7 @@ def find_closest_unnocupied_resources(game_state: Game, pos: Position, player: P
 
     for resource_tile in resource_tiles:
         if unit_map[resource_tile.pos.y][resource_tile.pos.x] != 0 or \
-            (max_occupancy != 1.0 and resource_tile.cluster.check_occupancy(unit_map) < max_occupancy):
+            (max_occupancy != 1.0 and resource_tile.cluster.check_occupancy(unit_map) > max_occupancy):
             pass
         elif resource_tile.resource.type == Constants.RESOURCE_TYPES.URANIUM:
             if not player.researched_uranium():
