@@ -72,7 +72,10 @@ class ResourceCluster:
 
     def _add_adjacent_cells(self, cell: Cell, map: GameMap):
         for direction in [DIRECTIONS.NORTH, DIRECTIONS.EAST, DIRECTIONS.WEST, DIRECTIONS.SOUTH]:
-            adjacent_cell = map.get_cell_by_pos(cell.pos.translate(direction, 1))
+            adjacent_cell_position = cell.pos.translate(direction, 1)
+            if adjacent_cell_position.x > -1 and adjacent_cell_position.y > -1 and \
+                adjacent_cell_position.x < map.width and adjacent_cell_position.y < map.height:
+                adjacent_cell = map.get_cell_by_pos(adjacent_cell_position)
 
             if adjacent_cell in self.cells or not adjacent_cell.has_resource:
                 pass
