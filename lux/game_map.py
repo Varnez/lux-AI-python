@@ -239,3 +239,14 @@ class CollisionMap(GameMap):
                 closest_cluster = cluster
 
         return closest_cluster
+
+
+    def get_mean_cluster_occupabcy(self) -> Cell:
+        total_occupancy = 0
+
+        for idx, cluster in enumerate(self.resource_clusters):
+            total_occupancy = self.cluster_population[idx] / cluster.cell_amount()
+
+        mean_occupancy = total_occupancy / len(self.cluser_population)
+
+        return mean_occupancy
